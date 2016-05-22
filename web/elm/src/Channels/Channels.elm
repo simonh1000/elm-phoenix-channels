@@ -43,12 +43,12 @@ update msg model =
 
 joinChannel : Model -> SendMsg -> Cmd msg
 joinChannel {socketUrl} joinMsg =
-    WS.send socketUrl (Debug.log "" <| encoder joinMsg)
+    WS.send socketUrl (Debug.log "joinChannel" <| encoder joinMsg)
     -- |> Cmd.map JoinConfirmation
 
 sendChannel : Model -> SendMsg -> Cmd msg
 sendChannel {socketUrl} msg =
-    WS.send socketUrl (Debug.log "" <| encoder msg)
+    WS.send socketUrl (Debug.log "sendChannel" <| encoder msg)
     -- |> Cmd.map JoinConfirmation
 
 isOpen model =

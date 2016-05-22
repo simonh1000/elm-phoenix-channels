@@ -8290,7 +8290,7 @@ var _user$project$Channels_Channels$sendChannel = F2(
 			_p1.socketUrl,
 			A2(
 				_elm_lang$core$Debug$log,
-				'',
+				'sendChannel',
 				_user$project$Channels_Model$encoder(msg)));
 	});
 var _user$project$Channels_Channels$joinChannel = F2(
@@ -8301,7 +8301,7 @@ var _user$project$Channels_Channels$joinChannel = F2(
 			_p3.socketUrl,
 			A2(
 				_elm_lang$core$Debug$log,
-				'',
+				'joinChannel',
 				_user$project$Channels_Model$encoder(joinMsg)));
 	});
 var _user$project$Channels_Channels$update = F2(
@@ -8510,19 +8510,132 @@ var _user$project$WithWebSocket$view = function (model) {
 			]));
 };
 
-var _user$project$App$Model = F2(
+var _user$project$Ports$channelSend = _elm_lang$core$Native_Platform.outgoingPort(
+	'channelSend',
+	function (v) {
+		return v;
+	});
+var _user$project$Ports$channelRec = _elm_lang$core$Native_Platform.incomingPort('channelRec', _elm_lang$core$Json_Decode$string);
+
+var _user$project$WithPorts$viewMessage = function (msg) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(msg)
+			]));
+};
+var _user$project$WithPorts$Model = F2(
 	function (a, b) {
-		return {viewType: a, websocket: b};
+		return {input: a, messages: b};
+	});
+var _user$project$WithPorts$init = {
+	ctor: '_Tuple2',
+	_0: A2(
+		_user$project$WithPorts$Model,
+		'',
+		_elm_lang$core$Native_List.fromArray(
+			[])),
+	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$WithPorts$update = F2(
+	function (msg, _p0) {
+		var _p1 = _p0;
+		var _p4 = _p1.messages;
+		var _p3 = _p1.input;
+		var _p2 = msg;
+		switch (_p2.ctor) {
+			case 'Input':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_user$project$WithPorts$Model, _p2._0, _p4),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Send':
+				return {
+					ctor: '_Tuple2',
+					_0: A2(_user$project$WithPorts$Model, '', _p4),
+					_1: _user$project$Ports$channelSend(_p3)
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: A2(
+						_user$project$WithPorts$Model,
+						_p3,
+						A2(_elm_lang$core$List_ops['::'], _p2._0, _p4)),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$WithPorts$NewMessage = function (a) {
+	return {ctor: 'NewMessage', _0: a};
+};
+var _user$project$WithPorts$Send = {ctor: 'Send'};
+var _user$project$WithPorts$Input = function (a) {
+	return {ctor: 'Input', _0: a};
+};
+var _user$project$WithPorts$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$h1,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Ports')
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				A2(_elm_lang$core$List$map, _user$project$WithPorts$viewMessage, model.messages)),
+				A2(
+				_elm_lang$html$Html$input,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onInput(_user$project$WithPorts$Input),
+						_elm_lang$html$Html_Attributes$value(model.input)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$WithPorts$Send)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Send')
+					]))
+			]));
+};
+
+var _user$project$App$Model = F3(
+	function (a, b, c) {
+		return {viewType: a, websocket: b, portsModel: c};
 	});
 var _user$project$App$PortsBased = {ctor: 'PortsBased'};
 var _user$project$App$ElmBased = {ctor: 'ElmBased'};
 var _user$project$App$init = {
 	ctor: '_Tuple2',
-	_0: A2(
+	_0: A3(
 		_user$project$App$Model,
 		_user$project$App$ElmBased,
-		_elm_lang$core$Basics$fst(_user$project$WithWebSocket$init)),
+		_elm_lang$core$Basics$fst(_user$project$WithWebSocket$init),
+		_elm_lang$core$Basics$fst(_user$project$WithPorts$init)),
 	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$App$PSMsg = function (a) {
+	return {ctor: 'PSMsg', _0: a};
 };
 var _user$project$App$WSMsg = function (a) {
 	return {ctor: 'WSMsg', _0: a};
@@ -8530,27 +8643,39 @@ var _user$project$App$WSMsg = function (a) {
 var _user$project$App$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		if (_p0.ctor === 'Switch') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{
-						viewType: _elm_lang$core$Native_Utils.eq(model.viewType, _user$project$App$ElmBased) ? _user$project$App$PortsBased : _user$project$App$ElmBased
-					}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			var _p1 = A2(_user$project$WithWebSocket$update, _p0._0, model.websocket);
-			var m = _p1._0;
-			var e = _p1._1;
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{websocket: m}),
-				_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$WSMsg, e)
-			};
+		switch (_p0.ctor) {
+			case 'Switch':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							viewType: _elm_lang$core$Native_Utils.eq(model.viewType, _user$project$App$ElmBased) ? _user$project$App$PortsBased : _user$project$App$ElmBased
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'WSMsg':
+				var _p1 = A2(_user$project$WithWebSocket$update, _p0._0, model.websocket);
+				var m = _p1._0;
+				var e = _p1._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{websocket: m}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$WSMsg, e)
+				};
+			default:
+				var _p2 = A2(_user$project$WithPorts$update, _p0._0, model.portsModel);
+				var m = _p2._0;
+				var e = _p2._1;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{portsModel: m}),
+					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$PSMsg, e)
+				};
 		}
 	});
 var _user$project$App$Switch = {ctor: 'Switch'};
@@ -8572,14 +8697,17 @@ var _user$project$App$view = function (model) {
 						_elm_lang$html$Html$text('Switch')
 					])),
 				function () {
-				var _p2 = model.viewType;
-				if (_p2.ctor === 'ElmBased') {
+				var _p3 = model.viewType;
+				if (_p3.ctor === 'ElmBased') {
 					return A2(
 						_elm_lang$html$Html_App$map,
 						_user$project$App$WSMsg,
 						_user$project$WithWebSocket$view(model.websocket));
 				} else {
-					return _elm_lang$html$Html$text('');
+					return A2(
+						_elm_lang$html$Html_App$map,
+						_user$project$App$PSMsg,
+						_user$project$WithPorts$view(model.portsModel));
 				}
 			}()
 			]));
@@ -8595,6 +8723,11 @@ var _user$project$Main$subscriptions = function (model) {
 				function (_p0) {
 					return _user$project$App$WSMsg(
 						_user$project$WithWebSocket$SocketMessage(_p0));
+				}),
+				_user$project$Ports$channelRec(
+				function (_p1) {
+					return _user$project$App$PSMsg(
+						_user$project$WithPorts$NewMessage(_p1));
 				})
 			]));
 };

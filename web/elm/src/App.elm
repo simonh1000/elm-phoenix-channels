@@ -11,7 +11,7 @@ import Platform.Cmd exposing (Cmd)
 import Debug
 
 import WithWebSocket as WS
--- import WithPorts as PS
+import WithPorts as PS
 
 
 type ViewType
@@ -21,18 +21,19 @@ type ViewType
 type alias Model =
     { viewType : ViewType
     , websocket : WS.Model
-    -- , ports : PS.Model
+    , portsModel : PS.Model
     }
 
+init : (Model, Cmd Msg)
 init =
-    ( Model ElmBased (fst WS.init) -- (fst PS.init)
+    ( Model ElmBased (fst WS.init) (fst PS.init)
     , Cmd.none
     )
 
 type Msg
     = Switch
     | WSMsg WS.Msg
-    -- | PSMsg PS.Msg
+    | PSMsg PS.Msg
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -41,27 +42,28 @@ update msg model =
             ( { model | viewType = if model.viewType == ElmBased then PortsBased else ElmBased }
             , Cmd.none
             )
-        WSMsg act ->
-            let (m, e) = WS.update act model.websocket
+        WSMsg msg' ->
+            let (m, e) = WS.update msg' model.websocket
             in
             ( { model | websocket = m }
             , Cmd.map WSMsg e
             )
-        -- PSMsg act ->
-        --     let (m, e) = PS.update act model.ports
-        --     in
-        --     ( { model | ports = m }
-        --     , Cmd.map PSMsg e
-        --     )
+        PSMsg msg' ->
+            let (m, e) = PS.update msg' model.portsModel
+            in
+            ( { model | portsModel = m }
+            , Cmd.map PSMsg e
+            )
 
+view : Model -> Html Msg
 view model =
     div []
     [ button
         [ onClick Switch ]
         [ text "Switch"]
     , case model.viewType of
-        ElmBased -> WS.view model.websocket |> Html.map WSMsg
+        ElmBased ->
+            WS.view model.websocket |> Html.map WSMsg
         PortsBased ->
-            text ""
-            -- PS.view model.ports |> Html.map PSMsg
+            PS.view model.portsModel |> Html.map PSMsg
     ]
