@@ -20,19 +20,19 @@ import "phoenix_html"
 
 import socket from "./socket"
 
+// Insert Elm component
+var elmDiv = document.getElementById('elm-main')
+  , elmApp = Elm.Main.embed(elmDiv);
+
 // Connect to channel
 let channel = socket.channel("rooms:lobby", {});
 channel.join()
 .receive("ok", resp => { console.log("Joined successfully", resp) })
 .receive("error", resp => { console.log("Unable to join", resp) })
 
-// Insert Elm component
-var elmDiv = document.getElementById('elm-main')
-  , elmApp = Elm.Main.embed(elmDiv);
-
 elmApp.ports.channelSend.subscribe( payload => {
     console.log(payload);
-    channel.push("new_msg", {body: payload.message})
+    channel.push("new_msg", {body: payload})
 });
 
 channel.on("new_msg", payload => {
