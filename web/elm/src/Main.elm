@@ -5,8 +5,7 @@ import Html.App as Html
 import WebSocket
 
 import App exposing (..)
-import WithWebSocket as WS
--- import Helpers exposing (channelUrl)
+import WithWebSocket as WWS
 -- import Ports exposing (..)
 -- import WithPorts as PS
 
@@ -23,6 +22,6 @@ main =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ WebSocket.listen WS.channelUrl (App.WSMsg << WS.SocketMessage)
+    [ WebSocket.listen WWS.socketUrl (App.WSMsg << WWS.SocketMessage)
     -- , channelRec (App.PSMsg << PS.NewMessage)
     ]

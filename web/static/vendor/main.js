@@ -8230,7 +8230,7 @@ var _user$project$Channels_Model$payloadDecoder = A2(
 	_elm_lang$core$Json_Decode$string);
 var _user$project$Channels_Model$Model = F3(
 	function (a, b, c) {
-		return {channelUrl: a, ref: b, state: c};
+		return {socketUrl: a, ref: b, state: c};
 	});
 var _user$project$Channels_Model$SendMsg = F4(
 	function (a, b, c, d) {
@@ -8287,7 +8287,7 @@ var _user$project$Channels_Channels$sendChannel = F2(
 		var _p1 = _p0;
 		return A2(
 			_elm_lang$websocket$WebSocket$send,
-			_p1.channelUrl,
+			_p1.socketUrl,
 			A2(
 				_elm_lang$core$Debug$log,
 				'',
@@ -8298,7 +8298,7 @@ var _user$project$Channels_Channels$joinChannel = F2(
 		var _p3 = _p2;
 		return A2(
 			_elm_lang$websocket$WebSocket$send,
-			_p3.channelUrl,
+			_p3.socketUrl,
 			A2(
 				_elm_lang$core$Debug$log,
 				'',
@@ -8313,7 +8313,10 @@ var _user$project$Channels_Channels$update = F2(
 				return {
 					ctor: '_Tuple2',
 					_0: model,
-					_1: A2(_user$project$Channels_Channels$joinChannel, model, joinMsg)
+					_1: A2(
+						_elm_lang$websocket$WebSocket$send,
+						model.socketUrl,
+						_user$project$Channels_Model$encoder(joinMsg))
 				};
 			case 'Send':
 				var myMsg = A4(_user$project$Channels_Model$SendMsg, 'rooms:lobby', 'new_msg', _p4._0, '1');
@@ -8326,26 +8329,21 @@ var _user$project$Channels_Channels$update = F2(
 				var _p5 = _user$project$Channels_Model$processRaw(
 					A2(_elm_lang$core$Debug$log, 'Raw', _p4._0));
 				if (_p5.ctor === 'Ok') {
-					return {
+					var _p6 = _p5._0;
+					return (_elm_lang$core$Native_Utils.eq(_p6.event, 'phx_reply') && _elm_lang$core$Native_Utils.eq(_p6.payload, 'ok')) ? {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{state: _user$project$Channels_Model$Open}),
 						_1: _elm_lang$core$Platform_Cmd$none
-					};
+					} : {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{state: _user$project$Channels_Model$Closed}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 				}
 		}
 	});
-var _user$project$Channels_Channels$init = function (channelUrl) {
-	return A3(_user$project$Channels_Model$Model, channelUrl, '1', _user$project$Channels_Model$Closed);
+var _user$project$Channels_Channels$init = function (socketUrl) {
+	return A3(_user$project$Channels_Model$Model, socketUrl, '1', _user$project$Channels_Model$Closed);
 };
 var _user$project$Channels_Channels$Raw = function (a) {
 	return {ctor: 'Raw', _0: a};
@@ -8365,7 +8363,7 @@ var _user$project$WithWebSocket$viewMessage = function (msg) {
 				_elm_lang$html$Html$text(msg)
 			]));
 };
-var _user$project$WithWebSocket$channelUrl = 'ws://localhost:4000/socket/websocket';
+var _user$project$WithWebSocket$socketUrl = 'ws://localhost:4000/socket/websocket';
 var _user$project$WithWebSocket$Model = F3(
 	function (a, b, c) {
 		return {input: a, messages: b, channel: c};
@@ -8377,7 +8375,7 @@ var _user$project$WithWebSocket$init = {
 		'',
 		_elm_lang$core$Native_List.fromArray(
 			[]),
-		_user$project$Channels_Channels$init(_user$project$WithWebSocket$channelUrl)),
+		_user$project$Channels_Channels$init(_user$project$WithWebSocket$socketUrl)),
 	_1: _elm_lang$core$Platform_Cmd$none
 };
 var _user$project$WithWebSocket$ChannelsMsg = function (a) {
@@ -8593,7 +8591,7 @@ var _user$project$Main$subscriptions = function (model) {
 			[
 				A2(
 				_elm_lang$websocket$WebSocket$listen,
-				_user$project$WithWebSocket$channelUrl,
+				_user$project$WithWebSocket$socketUrl,
 				function (_p0) {
 					return _user$project$App$WSMsg(
 						_user$project$WithWebSocket$SocketMessage(_p0));
