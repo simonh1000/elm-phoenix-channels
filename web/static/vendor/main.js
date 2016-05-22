@@ -7767,70 +7767,7 @@ var _elm_lang$websocket$WebSocket_LowLevel$BadCode = {ctor: 'BadCode'};
 var _elm_lang$websocket$WebSocket_LowLevel$BadString = {ctor: 'BadString'};
 var _elm_lang$websocket$WebSocket_LowLevel$NotOpen = {ctor: 'NotOpen'};
 
-var _user$project$Helpers$encoder = function (m) {
-	return A2(
-		_elm_lang$core$Json_Encode$encode,
-		0,
-		_elm_lang$core$Json_Encode$object(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					{
-					ctor: '_Tuple2',
-					_0: 'topic',
-					_1: _elm_lang$core$Json_Encode$string(m.topic)
-				},
-					{
-					ctor: '_Tuple2',
-					_0: 'event',
-					_1: _elm_lang$core$Json_Encode$string(m.event)
-				},
-					{
-					ctor: '_Tuple2',
-					_0: 'payload',
-					_1: _elm_lang$core$Json_Encode$string(m.payload)
-				},
-					{
-					ctor: '_Tuple2',
-					_0: 'ref',
-					_1: _elm_lang$core$Json_Encode$string(m.ref)
-				}
-				])));
-};
-var _user$project$Helpers$channelUrl = 'ws://localhost:4000/socket/websocket';
-var _user$project$Helpers$SendMsg = F4(
-	function (a, b, c, d) {
-		return {topic: a, event: b, payload: c, ref: d};
-	});
-var _user$project$Helpers$ChannelMsg = F4(
-	function (a, b, c, d) {
-		return {topic: a, event: b, payload: c, ref: d};
-	});
-var _user$project$Helpers$Payload = F2(
-	function (a, b) {
-		return {status: a, response: b};
-	});
-var _user$project$Helpers$payloadDecoder = A3(
-	_elm_lang$core$Json_Decode$object2,
-	_user$project$Helpers$Payload,
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'status', _elm_lang$core$Json_Decode$string),
-	A2(
-		_elm_lang$core$Json_Decode_ops[':='],
-		'response',
-		_elm_lang$core$Json_Decode$oneOf(
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$core$Json_Decode$string,
-					_elm_lang$core$Json_Decode$succeed('empty')
-				]))));
-var _user$project$Helpers$decoder = A5(
-	_elm_lang$core$Json_Decode$object4,
-	_user$project$Helpers$ChannelMsg,
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'topic', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'event', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'payload', _user$project$Helpers$payloadDecoder),
-	A2(_elm_lang$core$Json_Decode_ops[':='], 'ref', _elm_lang$core$Json_Decode$string));
-
-var _user$project$PChannel$closeConnection = function (connection) {
+var _elm_lang$websocket$WebSocket$closeConnection = function (connection) {
 	var _p0 = connection;
 	if (_p0.ctor === 'Opening') {
 		return _elm_lang$core$Process$kill(_p0._1);
@@ -7838,13 +7775,13 @@ var _user$project$PChannel$closeConnection = function (connection) {
 		return _elm_lang$websocket$WebSocket_LowLevel$close(_p0._0);
 	}
 };
-var _user$project$PChannel$after = function (backoff) {
+var _elm_lang$websocket$WebSocket$after = function (backoff) {
 	return (_elm_lang$core$Native_Utils.cmp(backoff, 1) < 0) ? _elm_lang$core$Task$succeed(
 		{ctor: '_Tuple0'}) : _elm_lang$core$Process$sleep(
 		_elm_lang$core$Basics$toFloat(
 			10 * Math.pow(2, backoff)));
 };
-var _user$project$PChannel$removeQueue = F2(
+var _elm_lang$websocket$WebSocket$removeQueue = F2(
 	function (name, state) {
 		return _elm_lang$core$Native_Utils.update(
 			state,
@@ -7852,7 +7789,7 @@ var _user$project$PChannel$removeQueue = F2(
 				queues: A2(_elm_lang$core$Dict$remove, name, state.queues)
 			});
 	});
-var _user$project$PChannel$updateSocket = F3(
+var _elm_lang$websocket$WebSocket$updateSocket = F3(
 	function (name, connection, state) {
 		return _elm_lang$core$Native_Utils.update(
 			state,
@@ -7860,7 +7797,7 @@ var _user$project$PChannel$updateSocket = F3(
 				sockets: A3(_elm_lang$core$Dict$insert, name, connection, state.sockets)
 			});
 	});
-var _user$project$PChannel$add = F2(
+var _elm_lang$websocket$WebSocket$add = F2(
 	function (value, maybeList) {
 		var _p1 = maybeList;
 		if (_p1.ctor === 'Nothing') {
@@ -7872,7 +7809,7 @@ var _user$project$PChannel$add = F2(
 				A2(_elm_lang$core$List_ops['::'], value, _p1._0));
 		}
 	});
-var _user$project$PChannel$buildSubDict = F2(
+var _elm_lang$websocket$WebSocket$buildSubDict = F2(
 	function (subs, dict) {
 		buildSubDict:
 		while (true) {
@@ -7885,7 +7822,7 @@ var _user$project$PChannel$buildSubDict = F2(
 						_v4 = A3(
 						_elm_lang$core$Dict$update,
 						_p2._0._0,
-						_user$project$PChannel$add(_p2._0._1),
+						_elm_lang$websocket$WebSocket$add(_p2._0._1),
 						dict);
 					subs = _v3;
 					dict = _v4;
@@ -7911,8 +7848,8 @@ var _user$project$PChannel$buildSubDict = F2(
 			}
 		}
 	});
-var _user$project$PChannel_ops = _user$project$PChannel_ops || {};
-_user$project$PChannel_ops['&>'] = F2(
+var _elm_lang$websocket$WebSocket_ops = _elm_lang$websocket$WebSocket_ops || {};
+_elm_lang$websocket$WebSocket_ops['&>'] = F2(
 	function (t1, t2) {
 		return A2(
 			_elm_lang$core$Task$andThen,
@@ -7921,7 +7858,7 @@ _user$project$PChannel_ops['&>'] = F2(
 				return t2;
 			});
 	});
-var _user$project$PChannel$sendMessagesHelp = F3(
+var _elm_lang$websocket$WebSocket$sendMessagesHelp = F3(
 	function (cmds, socketsDict, queuesDict) {
 		sendMessagesHelp:
 		while (true) {
@@ -7935,16 +7872,16 @@ var _user$project$PChannel$sendMessagesHelp = F3(
 				var _p6 = A2(_elm_lang$core$Dict$get, _p8, socketsDict);
 				if ((_p6.ctor === 'Just') && (_p6._0.ctor === 'Connected')) {
 					return A2(
-						_user$project$PChannel_ops['&>'],
+						_elm_lang$websocket$WebSocket_ops['&>'],
 						A2(_elm_lang$websocket$WebSocket_LowLevel$send, _p6._0._0, _p7),
-						A3(_user$project$PChannel$sendMessagesHelp, _p9, socketsDict, queuesDict));
+						A3(_elm_lang$websocket$WebSocket$sendMessagesHelp, _p9, socketsDict, queuesDict));
 				} else {
 					var _v9 = _p9,
 						_v10 = socketsDict,
 						_v11 = A3(
 						_elm_lang$core$Dict$update,
 						_p8,
-						_user$project$PChannel$add(_p7),
+						_elm_lang$websocket$WebSocket$add(_p7),
 						queuesDict);
 					cmds = _v9;
 					socketsDict = _v10;
@@ -7954,84 +7891,81 @@ var _user$project$PChannel$sendMessagesHelp = F3(
 			}
 		}
 	});
-var _user$project$PChannel$subscription = _elm_lang$core$Native_Platform.leaf('PChannel');
-var _user$project$PChannel$command = _elm_lang$core$Native_Platform.leaf('PChannel');
-var _user$project$PChannel$State = F3(
+var _elm_lang$websocket$WebSocket$subscription = _elm_lang$core$Native_Platform.leaf('WebSocket');
+var _elm_lang$websocket$WebSocket$command = _elm_lang$core$Native_Platform.leaf('WebSocket');
+var _elm_lang$websocket$WebSocket$State = F3(
 	function (a, b, c) {
 		return {sockets: a, queues: b, subs: c};
 	});
-var _user$project$PChannel$init = _elm_lang$core$Task$succeed(
-	A3(_user$project$PChannel$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
-var _user$project$PChannel$Send = F2(
+var _elm_lang$websocket$WebSocket$init = _elm_lang$core$Task$succeed(
+	A3(_elm_lang$websocket$WebSocket$State, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty, _elm_lang$core$Dict$empty));
+var _elm_lang$websocket$WebSocket$Send = F2(
 	function (a, b) {
 		return {ctor: 'Send', _0: a, _1: b};
 	});
-var _user$project$PChannel$send = F2(
+var _elm_lang$websocket$WebSocket$send = F2(
 	function (url, message) {
-		return _user$project$PChannel$command(
-			A2(
-				_user$project$PChannel$Send,
-				url,
-				A2(_elm_lang$core$Debug$log, 'send', message)));
+		return _elm_lang$websocket$WebSocket$command(
+			A2(_elm_lang$websocket$WebSocket$Send, url, message));
 	});
-var _user$project$PChannel$cmdMap = F2(
+var _elm_lang$websocket$WebSocket$cmdMap = F2(
 	function (_p11, _p10) {
 		var _p12 = _p10;
-		return A2(_user$project$PChannel$Send, _p12._0, _p12._1);
+		return A2(_elm_lang$websocket$WebSocket$Send, _p12._0, _p12._1);
 	});
-var _user$project$PChannel$KeepAlive = function (a) {
+var _elm_lang$websocket$WebSocket$KeepAlive = function (a) {
 	return {ctor: 'KeepAlive', _0: a};
 };
-var _user$project$PChannel$keepAlive = function (url) {
-	return _user$project$PChannel$subscription(
-		_user$project$PChannel$KeepAlive(url));
+var _elm_lang$websocket$WebSocket$keepAlive = function (url) {
+	return _elm_lang$websocket$WebSocket$subscription(
+		_elm_lang$websocket$WebSocket$KeepAlive(url));
 };
-var _user$project$PChannel$Listen = F2(
+var _elm_lang$websocket$WebSocket$Listen = F2(
 	function (a, b) {
 		return {ctor: 'Listen', _0: a, _1: b};
 	});
-var _user$project$PChannel$listen = F2(
+var _elm_lang$websocket$WebSocket$listen = F2(
 	function (url, tagger) {
-		return _user$project$PChannel$subscription(
-			A2(_user$project$PChannel$Listen, url, tagger));
+		return _elm_lang$websocket$WebSocket$subscription(
+			A2(_elm_lang$websocket$WebSocket$Listen, url, tagger));
 	});
-var _user$project$PChannel$subMap = F2(
+var _elm_lang$websocket$WebSocket$subMap = F2(
 	function (func, sub) {
 		var _p13 = sub;
 		if (_p13.ctor === 'Listen') {
 			return A2(
-				_user$project$PChannel$Listen,
+				_elm_lang$websocket$WebSocket$Listen,
 				_p13._0,
 				function (_p14) {
 					return func(
 						_p13._1(_p14));
 				});
 		} else {
-			return _user$project$PChannel$KeepAlive(_p13._0);
+			return _elm_lang$websocket$WebSocket$KeepAlive(_p13._0);
 		}
 	});
-var _user$project$PChannel$Connected = function (a) {
+var _elm_lang$websocket$WebSocket$Connected = function (a) {
 	return {ctor: 'Connected', _0: a};
 };
-var _user$project$PChannel$Opening = F2(
+var _elm_lang$websocket$WebSocket$Opening = F2(
 	function (a, b) {
 		return {ctor: 'Opening', _0: a, _1: b};
 	});
-var _user$project$PChannel$BadOpen = function (a) {
+var _elm_lang$websocket$WebSocket$BadOpen = function (a) {
 	return {ctor: 'BadOpen', _0: a};
 };
-var _user$project$PChannel$GoodOpen = F2(
+var _elm_lang$websocket$WebSocket$GoodOpen = F2(
 	function (a, b) {
 		return {ctor: 'GoodOpen', _0: a, _1: b};
 	});
-var _user$project$PChannel$Die = function (a) {
+var _elm_lang$websocket$WebSocket$Die = function (a) {
 	return {ctor: 'Die', _0: a};
 };
-var _user$project$PChannel$Receive = F2(
+var _elm_lang$websocket$WebSocket$Receive = F2(
 	function (a, b) {
 		return {ctor: 'Receive', _0: a, _1: b};
 	});
-var _user$project$PChannel$open = F2(
+var _elm_lang$websocket$WebSocket$open = F2(
 	function (name, router) {
 		return A2(
 			_elm_lang$websocket$WebSocket_LowLevel$open,
@@ -8042,52 +7976,52 @@ var _user$project$PChannel$open = F2(
 						return A2(
 							_elm_lang$core$Platform$sendToSelf,
 							router,
-							A2(_user$project$PChannel$Receive, name, msg));
+							A2(_elm_lang$websocket$WebSocket$Receive, name, msg));
 					}),
 				onClose: function (details) {
 					return A2(
 						_elm_lang$core$Platform$sendToSelf,
 						router,
-						_user$project$PChannel$Die(name));
+						_elm_lang$websocket$WebSocket$Die(name));
 				}
 			});
 	});
-var _user$project$PChannel$attemptOpen = F3(
+var _elm_lang$websocket$WebSocket$attemptOpen = F3(
 	function (router, backoff, name) {
 		var badOpen = function (_p16) {
 			return A2(
 				_elm_lang$core$Platform$sendToSelf,
 				router,
-				_user$project$PChannel$BadOpen(name));
+				_elm_lang$websocket$WebSocket$BadOpen(name));
 		};
 		var goodOpen = function (ws) {
 			return A2(
 				_elm_lang$core$Platform$sendToSelf,
 				router,
-				A2(_user$project$PChannel$GoodOpen, name, ws));
+				A2(_elm_lang$websocket$WebSocket$GoodOpen, name, ws));
 		};
 		var actuallyAttemptOpen = A2(
 			_elm_lang$core$Task$onError,
 			A2(
 				_elm_lang$core$Task$andThen,
-				A2(_user$project$PChannel$open, name, router),
+				A2(_elm_lang$websocket$WebSocket$open, name, router),
 				goodOpen),
 			badOpen);
 		return _elm_lang$core$Process$spawn(
 			A2(
-				_user$project$PChannel_ops['&>'],
-				_user$project$PChannel$after(backoff),
+				_elm_lang$websocket$WebSocket_ops['&>'],
+				_elm_lang$websocket$WebSocket$after(backoff),
 				actuallyAttemptOpen));
 	});
-var _user$project$PChannel$onEffects = F4(
+var _elm_lang$websocket$WebSocket$onEffects = F4(
 	function (router, cmds, subs, state) {
-		var newSubs = A2(_user$project$PChannel$buildSubDict, subs, _elm_lang$core$Dict$empty);
+		var newSubs = A2(_elm_lang$websocket$WebSocket$buildSubDict, subs, _elm_lang$core$Dict$empty);
 		var cleanup = function (newQueues) {
 			var rightStep = F3(
 				function (name, connection, getNewSockets) {
 					return A2(
-						_user$project$PChannel_ops['&>'],
-						_user$project$PChannel$closeConnection(connection),
+						_elm_lang$websocket$WebSocket_ops['&>'],
+						_elm_lang$websocket$WebSocket$closeConnection(connection),
 						getNewSockets);
 				});
 			var bothStep = F4(
@@ -8105,13 +8039,13 @@ var _user$project$PChannel$onEffects = F4(
 						function (newSockets) {
 							return A2(
 								_elm_lang$core$Task$andThen,
-								A3(_user$project$PChannel$attemptOpen, router, 0, name),
+								A3(_elm_lang$websocket$WebSocket$attemptOpen, router, 0, name),
 								function (pid) {
 									return _elm_lang$core$Task$succeed(
 										A3(
 											_elm_lang$core$Dict$insert,
 											name,
-											A2(_user$project$PChannel$Opening, 0, pid),
+											A2(_elm_lang$websocket$WebSocket$Opening, 0, pid),
 											newSockets));
 								});
 						});
@@ -8139,13 +8073,13 @@ var _user$project$PChannel$onEffects = F4(
 					_elm_lang$core$Task$succeed(_elm_lang$core$Dict$empty)),
 				function (newSockets) {
 					return _elm_lang$core$Task$succeed(
-						A3(_user$project$PChannel$State, newSockets, newQueues, newSubs));
+						A3(_elm_lang$websocket$WebSocket$State, newSockets, newQueues, newSubs));
 				});
 		};
-		var sendMessagesGetNewQueues = A3(_user$project$PChannel$sendMessagesHelp, cmds, state.sockets, state.queues);
+		var sendMessagesGetNewQueues = A3(_elm_lang$websocket$WebSocket$sendMessagesHelp, cmds, state.sockets, state.queues);
 		return A2(_elm_lang$core$Task$andThen, sendMessagesGetNewQueues, cleanup);
 	});
-var _user$project$PChannel$onSelfMsg = F3(
+var _elm_lang$websocket$WebSocket$onSelfMsg = F3(
 	function (router, selfMsg, state) {
 		var _p19 = selfMsg;
 		switch (_p19.ctor) {
@@ -8164,7 +8098,7 @@ var _user$project$PChannel$onSelfMsg = F3(
 							[]),
 						A2(_elm_lang$core$Dict$get, _p19._0, state.subs)));
 				return A2(
-					_user$project$PChannel_ops['&>'],
+					_elm_lang$websocket$WebSocket_ops['&>'],
 					_elm_lang$core$Task$sequence(sends),
 					_elm_lang$core$Task$succeed(state));
 			case 'Die':
@@ -8175,13 +8109,13 @@ var _user$project$PChannel$onSelfMsg = F3(
 				} else {
 					return A2(
 						_elm_lang$core$Task$andThen,
-						A3(_user$project$PChannel$attemptOpen, router, 0, _p21),
+						A3(_elm_lang$websocket$WebSocket$attemptOpen, router, 0, _p21),
 						function (pid) {
 							return _elm_lang$core$Task$succeed(
 								A3(
-									_user$project$PChannel$updateSocket,
+									_elm_lang$websocket$WebSocket$updateSocket,
 									_p21,
-									A2(_user$project$PChannel$Opening, 0, pid),
+									A2(_elm_lang$websocket$WebSocket$Opening, 0, pid),
 									state));
 						});
 				}
@@ -8192,9 +8126,9 @@ var _user$project$PChannel$onSelfMsg = F3(
 				if (_p22.ctor === 'Nothing') {
 					return _elm_lang$core$Task$succeed(
 						A3(
-							_user$project$PChannel$updateSocket,
+							_elm_lang$websocket$WebSocket$updateSocket,
 							_p23,
-							_user$project$PChannel$Connected(_p24),
+							_elm_lang$websocket$WebSocket$Connected(_p24),
 							state));
 				} else {
 					return A3(
@@ -8202,18 +8136,18 @@ var _user$project$PChannel$onSelfMsg = F3(
 						F2(
 							function (msg, task) {
 								return A2(
-									_user$project$PChannel_ops['&>'],
+									_elm_lang$websocket$WebSocket_ops['&>'],
 									A2(_elm_lang$websocket$WebSocket_LowLevel$send, _p24, msg),
 									task);
 							}),
 						_elm_lang$core$Task$succeed(
 							A2(
-								_user$project$PChannel$removeQueue,
+								_elm_lang$websocket$WebSocket$removeQueue,
 								_p23,
 								A3(
-									_user$project$PChannel$updateSocket,
+									_elm_lang$websocket$WebSocket$updateSocket,
 									_p23,
-									_user$project$PChannel$Connected(_p24),
+									_elm_lang$websocket$WebSocket$Connected(_p24),
 									state))),
 						_p22._0);
 				}
@@ -8227,13 +8161,13 @@ var _user$project$PChannel$onSelfMsg = F3(
 						var _p26 = _p25._0._0;
 						return A2(
 							_elm_lang$core$Task$andThen,
-							A3(_user$project$PChannel$attemptOpen, router, _p26 + 1, _p27),
+							A3(_elm_lang$websocket$WebSocket$attemptOpen, router, _p26 + 1, _p27),
 							function (pid) {
 								return _elm_lang$core$Task$succeed(
 									A3(
-										_user$project$PChannel$updateSocket,
+										_elm_lang$websocket$WebSocket$updateSocket,
 										_p27,
-										A2(_user$project$PChannel$Opening, _p26 + 1, pid),
+										A2(_elm_lang$websocket$WebSocket$Opening, _p26 + 1, pid),
 										state));
 							});
 					} else {
@@ -8242,7 +8176,184 @@ var _user$project$PChannel$onSelfMsg = F3(
 				}
 		}
 	});
-_elm_lang$core$Native_Platform.effectManagers['PChannel'] = {pkg: 'user/project', init: _user$project$PChannel$init, onEffects: _user$project$PChannel$onEffects, onSelfMsg: _user$project$PChannel$onSelfMsg, tag: 'fx', cmdMap: _user$project$PChannel$cmdMap, subMap: _user$project$PChannel$subMap};
+_elm_lang$core$Native_Platform.effectManagers['WebSocket'] = {pkg: 'elm-lang/websocket', init: _elm_lang$websocket$WebSocket$init, onEffects: _elm_lang$websocket$WebSocket$onEffects, onSelfMsg: _elm_lang$websocket$WebSocket$onSelfMsg, tag: 'fx', cmdMap: _elm_lang$websocket$WebSocket$cmdMap, subMap: _elm_lang$websocket$WebSocket$subMap};
+
+var _user$project$Channels_Model$payloadEncoder = function (p) {
+	return _elm_lang$core$Json_Encode$object(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 'body',
+				_1: _elm_lang$core$Json_Encode$string(p)
+			}
+			]));
+};
+var _user$project$Channels_Model$encoder = function (m) {
+	return A2(
+		_elm_lang$core$Json_Encode$encode,
+		0,
+		_elm_lang$core$Json_Encode$object(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{
+					ctor: '_Tuple2',
+					_0: 'topic',
+					_1: _elm_lang$core$Json_Encode$string(m.topic)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'event',
+					_1: _elm_lang$core$Json_Encode$string(m.event)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'payload',
+					_1: _user$project$Channels_Model$payloadEncoder(m.payload)
+				},
+					{
+					ctor: '_Tuple2',
+					_0: 'ref',
+					_1: _elm_lang$core$Json_Encode$string(m.ref)
+				}
+				])));
+};
+var _user$project$Channels_Model$payloadDecoder2 = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['body']),
+	_elm_lang$core$Json_Decode$string);
+var _user$project$Channels_Model$payloadDecoder = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['status']),
+	_elm_lang$core$Json_Decode$string);
+var _user$project$Channels_Model$Model = F3(
+	function (a, b, c) {
+		return {channelUrl: a, ref: b, state: c};
+	});
+var _user$project$Channels_Model$SendMsg = F4(
+	function (a, b, c, d) {
+		return {topic: a, event: b, payload: c, ref: d};
+	});
+var _user$project$Channels_Model$ChannelMsg = F4(
+	function (a, b, c, d) {
+		return {topic: a, event: b, payload: c, ref: d};
+	});
+var _user$project$Channels_Model$joinConfDecoder = A5(
+	_elm_lang$core$Json_Decode$object4,
+	_user$project$Channels_Model$ChannelMsg,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'topic', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'event', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'payload', _user$project$Channels_Model$payloadDecoder),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'ref', _elm_lang$core$Json_Decode$string));
+var _user$project$Channels_Model$newMsgDecoder = A5(
+	_elm_lang$core$Json_Decode$object4,
+	_user$project$Channels_Model$ChannelMsg,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'topic', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'event', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'payload', _user$project$Channels_Model$payloadDecoder2),
+	A2(
+		_elm_lang$core$Json_Decode_ops[':='],
+		'ref',
+		_elm_lang$core$Json_Decode$null('null ref')));
+var _user$project$Channels_Model$decoder = _elm_lang$core$Json_Decode$oneOf(
+	_elm_lang$core$Native_List.fromArray(
+		[_user$project$Channels_Model$joinConfDecoder, _user$project$Channels_Model$newMsgDecoder]));
+var _user$project$Channels_Model$processRaw = _elm_lang$core$Json_Decode$decodeString(_user$project$Channels_Model$decoder);
+var _user$project$Channels_Model$Payload = F2(
+	function (a, b) {
+		return {status: a, response: b};
+	});
+var _user$project$Channels_Model$Closed = {ctor: 'Closed'};
+var _user$project$Channels_Model$Closing = {ctor: 'Closing'};
+var _user$project$Channels_Model$Open = {ctor: 'Open'};
+var _user$project$Channels_Model$Connecting = {ctor: 'Connecting'};
+
+var _user$project$Channels_Channels$getNewMessage = function (s) {
+	return _elm_lang$core$Result$toMaybe(
+		A2(
+			_elm_lang$core$Result$map,
+			function (_) {
+				return _.payload;
+			},
+			A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Channels_Model$newMsgDecoder, s)));
+};
+var _user$project$Channels_Channels$isOpen = function (model) {
+	return _elm_lang$core$Native_Utils.eq(model.state, _user$project$Channels_Model$Open);
+};
+var _user$project$Channels_Channels$sendChannel = F2(
+	function (_p0, msg) {
+		var _p1 = _p0;
+		return A2(
+			_elm_lang$websocket$WebSocket$send,
+			_p1.channelUrl,
+			A2(
+				_elm_lang$core$Debug$log,
+				'',
+				_user$project$Channels_Model$encoder(msg)));
+	});
+var _user$project$Channels_Channels$joinChannel = F2(
+	function (_p2, joinMsg) {
+		var _p3 = _p2;
+		return A2(
+			_elm_lang$websocket$WebSocket$send,
+			_p3.channelUrl,
+			A2(
+				_elm_lang$core$Debug$log,
+				'',
+				_user$project$Channels_Model$encoder(joinMsg)));
+	});
+var _user$project$Channels_Channels$update = F2(
+	function (msg, model) {
+		var _p4 = msg;
+		switch (_p4.ctor) {
+			case 'Join':
+				var joinMsg = A4(_user$project$Channels_Model$SendMsg, 'rooms:lobby', 'phx_join', 'rooms:lobby', 'rooms:lobby');
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(_user$project$Channels_Channels$joinChannel, model, joinMsg)
+				};
+			case 'Send':
+				var myMsg = A4(_user$project$Channels_Model$SendMsg, 'rooms:lobby', 'new_msg', _p4._0, '1');
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(_user$project$Channels_Channels$sendChannel, model, myMsg)
+				};
+			default:
+				var _p5 = _user$project$Channels_Model$processRaw(
+					A2(_elm_lang$core$Debug$log, 'Raw', _p4._0));
+				if (_p5.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{state: _user$project$Channels_Model$Open}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{state: _user$project$Channels_Model$Closed}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+		}
+	});
+var _user$project$Channels_Channels$init = function (channelUrl) {
+	return A3(_user$project$Channels_Model$Model, channelUrl, '1', _user$project$Channels_Model$Closed);
+};
+var _user$project$Channels_Channels$Raw = function (a) {
+	return {ctor: 'Raw', _0: a};
+};
+var _user$project$Channels_Channels$Send = function (a) {
+	return {ctor: 'Send', _0: a};
+};
+var _user$project$Channels_Channels$Join = {ctor: 'Join'};
 
 var _user$project$WithWebSocket$viewMessage = function (msg) {
 	return A2(
@@ -8254,83 +8365,95 @@ var _user$project$WithWebSocket$viewMessage = function (msg) {
 				_elm_lang$html$Html$text(msg)
 			]));
 };
-var _user$project$WithWebSocket$Model = F2(
-	function (a, b) {
-		return {input: a, messages: b};
+var _user$project$WithWebSocket$channelUrl = 'ws://localhost:4000/socket/websocket';
+var _user$project$WithWebSocket$Model = F3(
+	function (a, b, c) {
+		return {input: a, messages: b, channel: c};
 	});
 var _user$project$WithWebSocket$init = {
 	ctor: '_Tuple2',
-	_0: A2(
+	_0: A3(
 		_user$project$WithWebSocket$Model,
 		'',
 		_elm_lang$core$Native_List.fromArray(
-			[])),
+			[]),
+		_user$project$Channels_Channels$init(_user$project$WithWebSocket$channelUrl)),
 	_1: _elm_lang$core$Platform_Cmd$none
+};
+var _user$project$WithWebSocket$ChannelsMsg = function (a) {
+	return {ctor: 'ChannelsMsg', _0: a};
 };
 var _user$project$WithWebSocket$update = F2(
 	function (msg, _p0) {
-		var _p1 = _p0;
-		var _p5 = _p1.messages;
-		var _p4 = _p1.input;
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Input':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$WithWebSocket$Model, _p2._0, _p5),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Join':
-				var joinMsg = A4(_user$project$Helpers$SendMsg, 'rooms:lobby', 'phx_join', _p4, '1');
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$WithWebSocket$Model, _p4, _p5),
-					_1: A2(
-						_user$project$PChannel$send,
-						_user$project$Helpers$channelUrl,
-						_user$project$Helpers$encoder(joinMsg))
-				};
-			case 'Send':
-				var myMsg = A4(_user$project$Helpers$SendMsg, 'rooms:lobby', 'phx_send', _p4, '1');
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$WithWebSocket$Model, '', _p5),
-					_1: A2(
-						_user$project$PChannel$send,
-						_user$project$Helpers$channelUrl,
-						_user$project$Helpers$encoder(myMsg))
-				};
-			default:
-				var _p3 = A2(_elm_lang$core$Json_Decode$decodeString, _user$project$Helpers$decoder, _p2._0);
-				if (_p3.ctor === 'Ok') {
+		update:
+		while (true) {
+			var _p1 = _p0;
+			var _p6 = _p1;
+			var _p2 = msg;
+			switch (_p2.ctor) {
+				case 'Input':
 					return {
 						ctor: '_Tuple2',
-						_0: A2(
-							_user$project$WithWebSocket$Model,
-							_p4,
-							A2(
-								_elm_lang$core$List_ops['::'],
-								_elm_lang$core$Basics$toString(_p3._0),
-								_p5)),
+						_0: _elm_lang$core$Native_Utils.update(
+							_p6,
+							{input: _p2._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
-				} else {
+				case 'Join':
+					var _v2 = _user$project$WithWebSocket$ChannelsMsg(_user$project$Channels_Channels$Join),
+						_v3 = _p6;
+					msg = _v2;
+					_p0 = _v3;
+					continue update;
+				case 'Send':
+					var _v4 = _user$project$WithWebSocket$ChannelsMsg(
+						_user$project$Channels_Channels$Send(_p6.input)),
+						_v5 = _elm_lang$core$Native_Utils.update(
+						_p6,
+						{input: ''});
+					msg = _v4;
+					_p0 = _v5;
+					continue update;
+				case 'SocketMessage':
+					var _p4 = _p2._0;
+					var _p3 = _user$project$Channels_Channels$getNewMessage(_p4);
+					if (_p3.ctor === 'Just') {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								_p6,
+								{
+									messages: A2(_elm_lang$core$List_ops['::'], _p3._0, _p1.messages)
+								}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					} else {
+						var _v7 = _user$project$WithWebSocket$ChannelsMsg(
+							_user$project$Channels_Channels$Raw(_p4)),
+							_v8 = _p6;
+						msg = _v7;
+						_p0 = _v8;
+						continue update;
+					}
+				default:
+					var _p5 = A2(
+						_user$project$Channels_Channels$update,
+						A2(_elm_lang$core$Debug$log, 'ChannelsMsg', _p2._0),
+						_p6.channel);
+					var m = _p5._0;
+					var e = _p5._1;
 					return {
 						ctor: '_Tuple2',
-						_0: A2(
-							_user$project$WithWebSocket$Model,
-							_p4,
-							A2(
-								_elm_lang$core$List_ops['::'],
-								_elm_lang$core$Basics$toString(_p3._0),
-								_p5)),
-						_1: _elm_lang$core$Platform_Cmd$none
+						_0: _elm_lang$core$Native_Utils.update(
+							_p6,
+							{channel: m}),
+						_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$WithWebSocket$ChannelsMsg, e)
 					};
-				}
+			}
 		}
 	});
-var _user$project$WithWebSocket$NewMessage = function (a) {
-	return {ctor: 'NewMessage', _0: a};
+var _user$project$WithWebSocket$SocketMessage = function (a) {
+	return {ctor: 'SocketMessage', _0: a};
 };
 var _user$project$WithWebSocket$Send = {ctor: 'Send'};
 var _user$project$WithWebSocket$Join = {ctor: 'Join'};
@@ -8352,7 +8475,7 @@ var _user$project$WithWebSocket$view = function (model) {
 					[
 						_elm_lang$html$Html$text('WebSocket')
 					])),
-				A2(
+				_user$project$Channels_Channels$isOpen(model.channel) ? _elm_lang$html$Html$text('open!!') : A2(
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -8389,132 +8512,19 @@ var _user$project$WithWebSocket$view = function (model) {
 			]));
 };
 
-var _user$project$Ports$channelSend = _elm_lang$core$Native_Platform.outgoingPort(
-	'channelSend',
-	function (v) {
-		return v;
-	});
-var _user$project$Ports$channelRec = _elm_lang$core$Native_Platform.incomingPort('channelRec', _elm_lang$core$Json_Decode$string);
-
-var _user$project$WithPorts$viewMessage = function (msg) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				_elm_lang$html$Html$text(msg)
-			]));
-};
-var _user$project$WithPorts$Model = F2(
+var _user$project$App$Model = F2(
 	function (a, b) {
-		return {input: a, messages: b};
-	});
-var _user$project$WithPorts$init = {
-	ctor: '_Tuple2',
-	_0: A2(
-		_user$project$WithPorts$Model,
-		'',
-		_elm_lang$core$Native_List.fromArray(
-			[])),
-	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _user$project$WithPorts$update = F2(
-	function (msg, _p0) {
-		var _p1 = _p0;
-		var _p4 = _p1.messages;
-		var _p3 = _p1.input;
-		var _p2 = msg;
-		switch (_p2.ctor) {
-			case 'Input':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$WithPorts$Model, _p2._0, _p4),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'Send':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$WithPorts$Model, '', _p4),
-					_1: _user$project$Ports$channelSend(_p3)
-				};
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: A2(
-						_user$project$WithPorts$Model,
-						_p3,
-						A2(_elm_lang$core$List_ops['::'], _p2._0, _p4)),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
-	});
-var _user$project$WithPorts$NewMessage = function (a) {
-	return {ctor: 'NewMessage', _0: a};
-};
-var _user$project$WithPorts$Send = {ctor: 'Send'};
-var _user$project$WithPorts$Input = function (a) {
-	return {ctor: 'Input', _0: a};
-};
-var _user$project$WithPorts$view = function (model) {
-	return A2(
-		_elm_lang$html$Html$div,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		_elm_lang$core$Native_List.fromArray(
-			[
-				A2(
-				_elm_lang$html$Html$h1,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Ports')
-					])),
-				A2(
-				_elm_lang$html$Html$div,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				A2(_elm_lang$core$List$map, _user$project$WithPorts$viewMessage, model.messages)),
-				A2(
-				_elm_lang$html$Html$input,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onInput(_user$project$WithPorts$Input),
-						_elm_lang$html$Html_Attributes$value(model.input)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(_user$project$WithPorts$Send)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Send')
-					]))
-			]));
-};
-
-var _user$project$App$Model = F3(
-	function (a, b, c) {
-		return {viewType: a, websocket: b, ports: c};
+		return {viewType: a, websocket: b};
 	});
 var _user$project$App$PortsBased = {ctor: 'PortsBased'};
 var _user$project$App$ElmBased = {ctor: 'ElmBased'};
 var _user$project$App$init = {
 	ctor: '_Tuple2',
-	_0: A3(
+	_0: A2(
 		_user$project$App$Model,
 		_user$project$App$ElmBased,
-		_elm_lang$core$Basics$fst(_user$project$WithWebSocket$init),
-		_elm_lang$core$Basics$fst(_user$project$WithPorts$init)),
+		_elm_lang$core$Basics$fst(_user$project$WithWebSocket$init)),
 	_1: _elm_lang$core$Platform_Cmd$none
-};
-var _user$project$App$PSMsg = function (a) {
-	return {ctor: 'PSMsg', _0: a};
 };
 var _user$project$App$WSMsg = function (a) {
 	return {ctor: 'WSMsg', _0: a};
@@ -8522,39 +8532,27 @@ var _user$project$App$WSMsg = function (a) {
 var _user$project$App$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
-		switch (_p0.ctor) {
-			case 'Switch':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							viewType: _elm_lang$core$Native_Utils.eq(model.viewType, _user$project$App$ElmBased) ? _user$project$App$PortsBased : _user$project$App$ElmBased
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'WSMsg':
-				var _p1 = A2(_user$project$WithWebSocket$update, _p0._0, model.websocket);
-				var m = _p1._0;
-				var e = _p1._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{websocket: m}),
-					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$WSMsg, e)
-				};
-			default:
-				var _p2 = A2(_user$project$WithPorts$update, _p0._0, model.ports);
-				var m = _p2._0;
-				var e = _p2._1;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{ports: m}),
-					_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$PSMsg, e)
-				};
+		if (_p0.ctor === 'Switch') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						viewType: _elm_lang$core$Native_Utils.eq(model.viewType, _user$project$App$ElmBased) ? _user$project$App$PortsBased : _user$project$App$ElmBased
+					}),
+				_1: _elm_lang$core$Platform_Cmd$none
+			};
+		} else {
+			var _p1 = A2(_user$project$WithWebSocket$update, _p0._0, model.websocket);
+			var m = _p1._0;
+			var e = _p1._1;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{websocket: m}),
+				_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$App$WSMsg, e)
+			};
 		}
 	});
 var _user$project$App$Switch = {ctor: 'Switch'};
@@ -8576,17 +8574,14 @@ var _user$project$App$view = function (model) {
 						_elm_lang$html$Html$text('Switch')
 					])),
 				function () {
-				var _p3 = model.viewType;
-				if (_p3.ctor === 'ElmBased') {
+				var _p2 = model.viewType;
+				if (_p2.ctor === 'ElmBased') {
 					return A2(
 						_elm_lang$html$Html_App$map,
 						_user$project$App$WSMsg,
 						_user$project$WithWebSocket$view(model.websocket));
 				} else {
-					return A2(
-						_elm_lang$html$Html_App$map,
-						_user$project$App$PSMsg,
-						_user$project$WithPorts$view(model.ports));
+					return _elm_lang$html$Html$text('');
 				}
 			}()
 			]));
@@ -8597,16 +8592,11 @@ var _user$project$Main$subscriptions = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_user$project$PChannel$listen,
-				_user$project$Helpers$channelUrl,
+				_elm_lang$websocket$WebSocket$listen,
+				_user$project$WithWebSocket$channelUrl,
 				function (_p0) {
 					return _user$project$App$WSMsg(
-						_user$project$WithWebSocket$NewMessage(_p0));
-				}),
-				_user$project$Ports$channelRec(
-				function (_p1) {
-					return _user$project$App$PSMsg(
-						_user$project$WithPorts$NewMessage(_p1));
+						_user$project$WithWebSocket$SocketMessage(_p0));
 				})
 			]));
 };

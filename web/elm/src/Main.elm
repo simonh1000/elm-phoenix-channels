@@ -1,14 +1,14 @@
 module Main exposing (..)
 
 import Html.App as Html
-import PChannel
+-- import PChannel
+import WebSocket
 
-import Ports exposing (..)
-import Helpers exposing (channelUrl)
-
-import App exposing (init, update, view, Msg, Model)
+import App exposing (..)
 import WithWebSocket as WS
-import WithPorts as PS
+-- import Helpers exposing (channelUrl)
+-- import Ports exposing (..)
+-- import WithPorts as PS
 
 main =
   Html.program
@@ -23,6 +23,6 @@ main =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ PChannel.listen channelUrl (App.WSMsg << WS.NewMessage)
-    , channelRec (App.PSMsg << PS.NewMessage)
+    [ WebSocket.listen WS.channelUrl (App.WSMsg << WS.SocketMessage)
+    -- , channelRec (App.PSMsg << PS.NewMessage)
     ]
