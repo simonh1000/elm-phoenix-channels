@@ -23,7 +23,7 @@ defmodule Meep.ChannelCase do
       alias Meep.Repo
       import Ecto
       import Ecto.Changeset
-      import Ecto.Query, only: [from: 1, from: 2]
+      import Ecto.Query
 
 
       # The default endpoint for testing
@@ -32,8 +32,10 @@ defmodule Meep.ChannelCase do
   end
 
   setup tags do
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Meep.Repo)
+
     unless tags[:async] do
-      Ecto.Adapters.SQL.restart_test_transaction(Meep.Repo, [])
+      Ecto.Adapters.SQL.Sandbox.mode(Meep.Repo, {:shared, self()})
     end
 
     :ok

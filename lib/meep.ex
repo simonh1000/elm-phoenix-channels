@@ -10,7 +10,8 @@ defmodule Meep do
       # Start the endpoint when the application starts
       supervisor(Meep.Endpoint, []),
       # Start the Ecto repository
-      supervisor(Meep.Repo, []),
+      # uncomment, if you want to use a database
+      # supervisor(Meep.Repo, []),
       # Here you could define other workers and supervisors as children
       # worker(Meep.Worker, [arg1, arg2, arg3]),
     ]
