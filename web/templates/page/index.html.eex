@@ -1,1 +1,5 @@
-<div id="elm-main"></div>
+<%= form_for @conn, chat_path(@conn, :index), [as: :chat, method: :get], fn f -> %>
+  <%= text_input f, :code %>
+  <%= submit "Start chat" %>
+<% end %>
+

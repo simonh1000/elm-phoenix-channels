@@ -1,30 +1,17 @@
 module Main exposing (..)
 
 import Html.App as Html
-import WebSocket
 
-import Ports exposing (..)
+import Phoenix.Socket
 
-import WithWebSocket as WWS
-import WithPorts as PS
-
+import Chat
 import App exposing (..)
 
 main =
-  Html.program
+  Html.programWithFlags
     { init = init
     , view = view
     , update = update
-    , subscriptions = subscriptions
+    , subscriptions = Chat.subscriptions
     }
 
--- SUBSCRIPTIONS
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    -- Sub.none
-    -- WebSocket.listen WWS.socketUrl (App.WSMsg << WWS.SocketMessage)
-  Sub.batch
-    [ WebSocket.listen WWS.socketUrl (App.WSMsg << WWS.SocketMessage)
-    , channelRec (App.PSMsg << PS.NewMessage)
-    ]

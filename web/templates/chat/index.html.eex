@@ -1,0 +1,5 @@
+Code: <%= @code %>
+<script type="text/javascript">
+  window.code = "<%=@code%>";
+</script>
+<div id="elm-main"></div>
