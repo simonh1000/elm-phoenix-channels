@@ -23,19 +23,6 @@ socketServer = "ws://localhost:4000/socket/websocket"
 -- MODEL
 
 
-type Msg
-  = ReceiveMessage String
-  | SendMessage
-  | SetNewMessage String
-  | PhoenixMsg (Phoenix.Socket.Msg Msg)
-  | ReceiveChatMessage JE.Value
-  | JoinChannel
-  | LeaveChannel
-  | ShowJoinedMessage String
-  | ShowLeftMessage String
-  | NoOp
-
-
 type alias Model =
   { code : String
   , newMessage : String
@@ -87,9 +74,17 @@ chatMessageDecoder =
 
 -- UPDATE
 
-userParams : String -> JE.Value
-userParams userId =
-  JE.object [ ("user_id", JE.string userId) ]
+type Msg
+  = ReceiveMessage String
+  | SendMessage
+  | SetNewMessage String
+  | PhoenixMsg (Phoenix.Socket.Msg Msg)
+  | ReceiveChatMessage JE.Value
+  | JoinChannel
+  | LeaveChannel
+  | ShowJoinedMessage String
+  | ShowLeftMessage String
+  | NoOp
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -218,3 +213,9 @@ newMessageForm model =
 renderMessage : String -> Html Msg
 renderMessage str =
   li [] [ text str ]
+
+
+
+userParams : String -> JE.Value
+userParams userId =
+  JE.object [ ("user_id", JE.string userId) ]

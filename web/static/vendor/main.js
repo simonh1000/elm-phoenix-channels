@@ -8761,6 +8761,17 @@ var _fbonetti$elm_phoenix_socket$Phoenix_Socket$listen = F2(
 				]));
 	});
 
+var _user$project$Chat$userParams = function (userId) {
+	return _elm_lang$core$Json_Encode$object(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: 'user_id',
+				_1: _elm_lang$core$Json_Encode$string(userId)
+			}
+			]));
+};
 var _user$project$Chat$renderMessage = function (str) {
 	return A2(
 		_elm_lang$html$Html$li,
@@ -8822,17 +8833,6 @@ var _user$project$Chat$channelsTable = function (channels) {
 				_elm_lang$core$Native_List.fromArray(
 					[]),
 				A2(_elm_lang$core$List$map, _user$project$Chat$channelRow, channels))
-			]));
-};
-var _user$project$Chat$userParams = function (userId) {
-	return _elm_lang$core$Json_Encode$object(
-		_elm_lang$core$Native_List.fromArray(
-			[
-				{
-				ctor: '_Tuple2',
-				_0: 'user_id',
-				_1: _elm_lang$core$Json_Encode$string(userId)
-			}
 			]));
 };
 var _user$project$Chat$socketServer = 'ws://localhost:4000/socket/websocket';
