@@ -13,7 +13,7 @@ use Mix.Config
 # Configures the endpoint
 config :meep, Meep.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "NeiF0LUFeCOKffYUcfCkx0qITTYlIEW2SsXflL6Zc/uere0M9EDOEnTRkbDdLXgw",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: Meep.PubSub,
            adapter: Phoenix.PubSub.PG2]
