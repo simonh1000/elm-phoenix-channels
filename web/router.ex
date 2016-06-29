@@ -17,6 +17,7 @@ defmodule Meep.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    resources "/chats", ChatController, only: [:index]
   end
 
   # Other scopes may use custom stacks.
